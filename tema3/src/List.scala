@@ -63,11 +63,56 @@ object List {
     */
   def product(ds: List[Double]): Double = ds match {
     // Producto de lista vacia
-    case Nil => 0
+    case Nil => 1.0
     // Producto si el primer elemento es 0
     case Cons(0.0, _) => 0.0
     // Caso general: se acumula multiplicando con el valor en cabeza
     case Cons(x, xs) => x * product(xs)
+  }
+
+  /**
+    * Metodo para eliminar el primer elemento de la lista
+    * @param ds
+    * @tparam A
+    * @return
+    */
+  def tail[A] (ds : List[A]) : List[A] = {
+    ds match {
+      case Nil => Nil
+      case Cons(_, t) => t
+    }
+  }
+
+  /**
+    * Metodo para eliminar n elementos de la cabeza de la lista
+    * @param ds
+    * @param n
+    * @tparam A
+    * @return
+    */
+  def drop[A](ds : List[A], n : Int) : List[A] = {
+    if(n <= 0) ds
+    else{
+      ds match {
+        case Nil => Nil
+        case Cons(_, t) => drop(t, n-1)
+      }
+    }
+  }
+
+  /**
+    * Metodo para eliminar elementos de la cabeza mientras se cumpla
+    * una determinada condicion
+    * @param ds
+    * @param f
+    * @tparam A
+    * @return
+    */
+  def dropWhile[A](ds : List[A], f : A => Boolean) : List[A] = {
+    ds match {
+      case Cons(h, ts) if (f(h)) => dropWhile(ts, f)
+      case _ => ds
+    }
   }
 
   /**
@@ -106,4 +151,20 @@ object Prueba extends App {
 
   val res4 = List.product(listaEnteros2)
   println("Resultado de producto (lista vacia): " + res4)
+
+  // Prueba de tail
+  val res5=List.tail(listaEnteros1)
+  println(res5)
+
+  // Prueba de drop
+  val res6=List.drop(listaEnteros1, 3)
+  println(res6)
+
+  // Prueba de drop sobre la lista vacia
+  val res7=List.drop(Nil,3)
+  println(res7)
+
+  // Prueba de dropWhile
+  val res8=List.dropWhile(listaEnteros1, (x : Int) => x < 3)
+  println(res8)
 }
