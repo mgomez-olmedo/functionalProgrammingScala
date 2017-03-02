@@ -1,8 +1,6 @@
-package fpinscala.gettingstarted
 
-import fpinscala.gettingstarted.MiModulo._
-import fpinscala.gettingstarted.Factorial._
-
+import MiModulo._
+import Factorial._
 
 /**
   * Created by mgomez on 1/3/17.

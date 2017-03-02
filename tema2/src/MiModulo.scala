@@ -1,6 +1,4 @@
 
-package fpinscala.gettingstarted
-
 /**
   * Declaracion de objeto, como forma de implementacion del patron Singleton.
   * De esta forma, este objeto sera el unico objeto posible de este tipo.

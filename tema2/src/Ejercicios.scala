@@ -1,4 +1,3 @@
-package fpinscala.gettingstarted
 
 /**
   * Created by mgomez on 1/3/17.

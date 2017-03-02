@@ -1,8 +1,6 @@
 
-package fpinscala.gettingstarted
-
 // Se importa la declaracion del metodo abs en MiModulo (y cualquier otro)
-import fpinscala.gettingstarted.MiModulo._
+import MiModulo._
 
 /**
   * Created by mgomez on 1/3/17.
