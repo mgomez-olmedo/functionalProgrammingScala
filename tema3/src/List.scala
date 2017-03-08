@@ -66,6 +66,7 @@ object List {
    }
 
    /**
+     * Ejercicio 2
      * Metodo para eliminar el primer elemento de la lista
      *
      * @param ds
@@ -80,6 +81,7 @@ object List {
    }
 
    /**
+     * Ejercicio 3
      * Metodo para eliminar n elementos de la cabeza de la lista
      *
      * @param ds
@@ -98,6 +100,7 @@ object List {
    }
 
    /**
+     * Ejercicio 4
      * Metodo para eliminar elementos de la cabeza mientras se cumpla
      * una determinada condicion
      *
@@ -114,6 +117,7 @@ object List {
    }
 
    /**
+     * Ejercicio 5
      * Metodo para agregar un elemento en el inicion de la lista
      * @param a
      * @param as
@@ -158,6 +162,7 @@ object List {
    }
 
    /**
+     * Ejercicio 6
      * Metodo para eliminar el ultimo elemento de la lista
      * @param as
      * @tparam A
@@ -205,6 +210,7 @@ object List {
       foldRight(l, 1.0)(_ * _)
 
    /**
+     * Ejercicio 9
      * Metodo de calculo de longitud usando foldRight
      * @param l
      * @tparam Int
@@ -215,6 +221,7 @@ object List {
    }
 
    /**
+     * Ejercicio 10
      * Metodo foldLeft para tratamiento de una lista, pero ahora con
      * tail recursion
      * @param l
@@ -226,7 +233,6 @@ object List {
      */
    def foldLeft[A,B](l : List[A], z : B)(f : (A,B) => B) : B = {
       def go(l : List[A], z : B, acum : B) : B = {
-         println("Valor de z: "+z+" acum: "+acum)
          l match {
             case Nil => acum
             case Cons(x, xs) => go(xs, z, f(x, acum))
@@ -238,6 +244,7 @@ object List {
    }
 
    /**
+     * Ejercicio 11 (a)
      * Metodo de suma usando foldLeft
      * @param l
      * @return
@@ -247,6 +254,7 @@ object List {
    }
 
    /**
+     * Ejercicio 11 (b)
      * Metodo de multiplicacion usando foldLeft
      * @param l
      * @return
@@ -256,6 +264,7 @@ object List {
    }
 
    /**
+     * Ejercicio 11 (c)
      * Metodo de calculo de la longitud en base a foldLeft
      * @param l
      * @tparam Int
@@ -265,13 +274,67 @@ object List {
       foldLeft(l, 0)((x,y) => y+1)
    }
 
+   /**
+     * Ejercicio 12
+     * Metodo reverse para invertir el contenido de la lista
+     * @param l
+     * @tparam A
+     * @return
+     */
    def reverse[A](l : List[A]) : List[A] = {
-      foldLeft(l, Nil)((l1, l2) => {
-         l1 match {
-            case Nil => l2
-            case Cons(h, t) => Cons()
+      def go(l : List[A], res : List[A]) : List[A] = {
+         l match {
+            case Nil => res
+            case Cons(h,t) => go(t, Cons(h, res))
          }
-      })
+      }
+
+      go(l,Nil)
+   }
+
+   /**
+     * Ejercicio 13: foldLeft en terminos de foldRight
+     * @param l
+     * @param z
+     * @param f
+     * @tparam A
+     * @tparam B
+     * @return
+     */
+   def foldLeftViaFoldRightBase[A,B](l: List[A], z: B)(f: (B,A) => B): B =
+      foldRight(l, (b: B) => b)((a, g) => b => g(f(b, a)))(z)
+
+   /**
+     * Ejercicio 13: foldLeft en terminos de foldRight
+     * @param l
+     * @param z
+     * @param f
+     * @tparam A
+     * @tparam B
+     * @return
+     */
+   def foldLeftViaFoldRight[A,B](l: List[A], z: B)(f: (B,A) => B): B = {
+      val g = (b:B) => b
+      foldRight(l, g)((a, g) => {
+         b => {
+            println("b: "+b+" a: "+a)
+            val fba = f(b,a)
+            val gba = g(fba)
+            println("Calculo de f: "+fba)
+            println("Calculo de g: "+gba)
+            gba
+         }
+      })(z)
+   }
+
+   /**
+     * Ejercicio 13 (b)
+     * Metodo de suma usando foldLeft2
+     * @param l
+     * @return
+     */
+   def sum4(l : List[Int]) = {
+      foldLeftViaFoldRight(l, 0.0)(_ + _)
    }
 }
 
@@ -279,71 +342,154 @@ object List {
   * Objeto prueba, derivando de App para probar
   */
 object Prueba extends App {
+   // Ejercicio 1
+   val x = List(1,2,3,4,5) match {
+      case Cons(x, Cons(2, Cons(4, _))) => x
+      case Nil => 42
+      case Cons(x, Cons(y, Cons(3, Cons(4,_)))) => x+y
+      case Cons(h,t) => h+List.sum(t)
+      case _ => 101
+   }
+   // Debe obtenerse 3 como valor: el caso con el que concuerda en primer
+   // lugar es el tercero
+   println("Valor de x: "+x)
+
+   // -----------------------------------------------
    val listaEnteros1 = List[Int](1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
    val res1 = List.sum(listaEnteros1)
+   println("Suma sobre lista: ")
+   println(listaEnteros1)
    println("Resultado de suma: " + res1)
+   println()
 
    val listaEnteros2 = Nil
    val res2 = List.sum(listaEnteros2)
    println("Resultado de suma (lista vacia): " + res2)
+   println()
 
    // Producto sobre la lista no vacia
    val listaEnteros3 = List[Double](1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+   println("Producto sobre lista: ")
+   println(listaEnteros3)
    val res3 = List.product(listaEnteros3)
    println("Resultado de producto: " + res3)
+   println()
 
    val res4 = List.product(listaEnteros2)
+   println("Producto sobre lista: ")
+   println(listaEnteros2)
    println("Resultado de producto (lista vacia): " + res4)
+   println()
 
-   // Prueba de tail
+   // Ejercicio 2: prueba de tail
+   println("Aplicacion de tail: ")
+   println(listaEnteros1)
    val res5 = List.tail(listaEnteros1)
    println(res5)
+   println()
 
-   // Prueba de drop
+   // Ejercicio 3: prueba de drop
+   println("Aplicacion de drop: ")
+   println(listaEnteros1)
    val res6 = List.drop(listaEnteros1, 3)
    println(res6)
+   println()
 
-   // Prueba de drop sobre la lista vacia
+   // Ejercicio 3: Prueba de drop sobre la lista vacia
+   println("Uso de drop sobre lista vacia: ")
    val res7 = List.drop(Nil, 3)
    println(res7)
+   println()
 
-   // Prueba de dropWhile
+   // Ejercicio 4: prueba de dropWhile
+   println("Uso de dropWhile: ")
+   println(listaEnteros1)
    val res8 = List.dropWhile(listaEnteros1, (x: Int) => x < 3)
    println(res8)
+   println()
 
-   // Prueba de setHead
+   // Ejercicio 5: prueba de setHead
+   println("Uso de setHead: ")
+   println(listaEnteros1)
    val res9 = List.setHead(-10, listaEnteros1)
    println(res9)
+   println()
 
-   // Prueba de init
+   // Ejercicio 6: prueba de init
+   println("Uso de init: ")
+   println(listaEnteros1)
    val res10 = List.init(listaEnteros1)
    println(res10)
+   println()
 
-   // Prueba de sum2
+   // Ejercicio 10 (a): prueba de sum2
+   println("Uso de sum2 (implementacion con foldRight): ")
+   println(listaEnteros1)
    val res11 = List.sum2(listaEnteros1)
    println(res11)
+   println()
 
-   // Prueba de mul2
+   // Ejercicio 10 (b): prueba de mul2
+   println("Uso de product2 (implementacion con foldRight): ")
+   println(listaEnteros3)
    val res12 = List.product2(listaEnteros3)
    println(res12)
+   println()
 
-   // Prueba del ejercicio 8
+   // Ejercicio 7: se mira si la implementacion del producto mediante
+   // foldRight puede detenerse de forma inmediata al encontrar un 0.0
+   // Creamos una lista para esto. Obviamante, el método no puede
+   // deternerse e itera sobre todos los elementos de la lista
+   val listaEnteros4= List[Double](1, 2, 0, 4, 5, 6, 7, 8, 9, 10)
+
+   // Ejercicio 8: la salida pone de manifiesto la relacion entre
+   // foldRight y la construccion de listas
    val res13:List[Int] = List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_))
+   println()
+   println("Salida del ejercicio 8")
    println(res13)
 
-   // Prueba del ejercicio 10
+   // Ejercicio 9: prueba de obtencion de longitud
+   println("Uso de length (implementado con foldRight): ")
+   println(listaEnteros1)
    val res14 = List.lenght(listaEnteros1)
    println(res14)
+   println()
 
-   // Prueba del ejercicio 11
+   // Ejercicio 11 (a): Prueba del ejercicio 11
+   println("Uso de sum3 (implementado con foldLeft): ")
+   println(listaEnteros1)
    val res15 = List.sum3(listaEnteros1)
    println(res15)
+   println()
 
-   // Igual con product3
+   // Ejercicio 11(b) : prueba de producto
+   println("Uso de product3 (implementado con foldLeft): ")
+   println(listaEnteros3)
    val res16 = List.product3(listaEnteros3)
    println(res16)
+   println()
 
-   // Igual con length2
+   // Ejercicio 11 (c): igual con length2
+   println("Uso de length2 (implementado sobre foldLeft): ")
+   println(listaEnteros1)
    val res17 = List.length2(listaEnteros1)
    println(res17)
+   println()
+
+   // Ejercicio 12: prueba de reverse
+   println("Uso de reverse (implementado sobre foldLeft): ")
+   println(listaEnteros1)
+   val res18 = List.reverse(listaEnteros1)
+   println(res18)
+   println()
+
+
+   // Ejercicio 13: prueba de foldLeft2
+   println("Uso de sum4 (implementado sobre foldLeft2): ")
+   println(listaEnteros1)
+   val res19 = List.sum4(listaEnteros1)
+   println(res19)
+   println()
+
 }
